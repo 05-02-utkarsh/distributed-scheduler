@@ -20,7 +20,6 @@ CREATE TYPE worker_status AS ENUM (
     'DEAD'
 );
 
-jnn
 -- =========================
 -- Jobs table
 -- =========================
