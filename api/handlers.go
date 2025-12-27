@@ -34,7 +34,7 @@ func createJob(c *gin.Context) {
 		req.JobType,
 		req.Payload,
 		req.MaxRetries,
-		time.Now(),
+		time.Now().UTC(),
 	)
 
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -51,3 +52,20 @@ func claimJob(jobID string) error {
 }
 
 // This function claims a job by updating its status from SUBMITTED to QUEUED atomically.
+
+func createExecution(jobID string) (string, error) {
+	execID := uuid.New().String()
+
+	_, err := db.Exec(context.Background(), `
+		INSERT INTO job_executions (
+			execution_id, job_id, status
+		)
+		VALUES ($1, $2, 'QUEUED')
+	`, execID, jobID)
+
+	if err != nil {
+		return "", err
+	}
+
+	return execID, nil
+}

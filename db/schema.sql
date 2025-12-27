@@ -32,9 +32,9 @@ CREATE TABLE jobs (
     retry_count INT NOT NULL DEFAULT 0,
     max_retries INT NOT NULL DEFAULT 3,
 
-    next_run_time TIMESTAMP NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    next_run_time TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
     idempotency_key TEXT UNIQUE
 );
@@ -48,8 +48,8 @@ CREATE TABLE job_executions (
     worker_id UUID NOT NULL,
 
     status job_status NOT NULL,
-    started_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    finished_at TIMESTAMP,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    finished_at TIMESTAMPTZ,
     error_message TEXT,
 
     CONSTRAINT fk_job
@@ -66,8 +66,8 @@ CREATE TABLE workers (
     hostname TEXT,
 
     status worker_status NOT NULL,
-    last_heartbeat TIMESTAMP NOT NULL,
-    registered_at TIMESTAMP NOT NULL DEFAULT NOW()
+    last_heartbeat TIMESTAMPTZ NOT NULL,
+    registered_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- =========================
