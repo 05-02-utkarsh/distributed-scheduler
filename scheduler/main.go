@@ -6,8 +6,11 @@ import (
 )
 
 func main() {
+	// 1️⃣ Init dependencies
 	initDB()
 	initKafka()
+	initEtcd()            // 🆕 etcd client
+	startLeaderElection() // 🆕 leader election goroutine
 
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
@@ -16,6 +19,11 @@ func main() {
 
 	for {
 		<-ticker.C
+
+		// 🔒 ONLY LEADER RUNS THE SCHEDULER LOOP
+		if !isLeader {
+			continue
+		}
 
 		jobs, err := fetchReadyJobs(10)
 		if err != nil {
